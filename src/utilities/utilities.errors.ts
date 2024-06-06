@@ -7,6 +7,7 @@ enum ErrorMessages {
   USER_IS_BLOCKED = 'User is blocked',
   USER_NOT_ADMIN = 'User is not admin',
   CANNOT_UPDATE_ADMIN = 'You cannot update an admin user',
+  CANNOT_UPDATE_THIS_USER = 'You cannot update this user',
 }
 
 export default ErrorMessages;

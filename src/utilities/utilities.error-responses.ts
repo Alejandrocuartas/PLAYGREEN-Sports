@@ -30,6 +30,16 @@ const GetErrorResponse = (error: any) => {
         { message: ErrorMessages.USER_NOT_ADMIN },
         HttpStatus.UNAUTHORIZED,
       );
+    case ErrorMessages.CANNOT_UPDATE_THIS_USER:
+      throw new HttpException(
+        { message: ErrorMessages.CANNOT_UPDATE_THIS_USER },
+        HttpStatus.UNAUTHORIZED,
+      );
+    case ErrorMessages.CANNOT_UPDATE_ADMIN:
+      throw new HttpException(
+        { message: ErrorMessages.CANNOT_UPDATE_ADMIN },
+        HttpStatus.UNAUTHORIZED,
+      );
     default:
       throw new HttpException(
         { message: error.message },
