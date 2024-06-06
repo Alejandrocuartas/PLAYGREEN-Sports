@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { getEnv } from './app.environment';
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
+import { BetsModule } from './bets/bets.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -15,7 +16,10 @@ import { AdminModule } from './admin/admin.module';
       password: getEnv('DB_PASSWORD'),
       username: getEnv('DB_USERNAME'),
       database: getEnv('DB_NAME'),
-      entities: [__dirname + '/users/entities/*.entity{.ts,.js}'],
+      entities: [
+        __dirname + '/users/entities/*.entity{.ts,.js}',
+        __dirname + '/bets/entities/*.entity{.ts,.js}',
+      ],
       synchronize: true,
       logging: true,
       ssl: {
@@ -25,8 +29,9 @@ import { AdminModule } from './admin/admin.module';
     UsersModule,
     AuthModule,
     AdminModule,
+    BetsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
