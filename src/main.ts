@@ -31,5 +31,6 @@ async function bootstrap() {
   }
 
   await app.listen(Number(port));
+  console.log(`Server is running on port ${port}`);
 }
 bootstrap();

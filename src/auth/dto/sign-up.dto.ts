@@ -4,9 +4,9 @@ import {
     MinLength,
     IsEnum,
 } from 'class-validator';
-import { UserRole } from '../entities/user.entity';
+import { UserRole } from '../../users/entities/user.entity';
 
-export class CreateUserDto {
+export class signUpDto {
 
     @IsString()
     @MinLength(3, { message: 'first_name must have atleast 3 characters.' })
