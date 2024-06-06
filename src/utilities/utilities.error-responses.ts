@@ -25,6 +25,11 @@ const GetErrorResponse = (error: any) => {
                 { message: ErrorMessages.USER_NOT_ACTIVE },
                 HttpStatus.UNAUTHORIZED,
             );
+        case ErrorMessages.USER_NOT_ADMIN:
+            throw new HttpException(
+                { message: ErrorMessages.USER_NOT_ADMIN },
+                HttpStatus.UNAUTHORIZED,
+            );
         default:
             throw new HttpException(
                 { message: error.message },

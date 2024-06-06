@@ -11,7 +11,7 @@ import {
 import { AuthService } from './auth.service';
 import { signInDto } from './dto/sign-in.dto';
 import GetErrorResponse from 'src/utilities/utilities.error-responses';
-import { AuthGuard } from './auth.guard';
+import { AuthGuard, AdminGuard } from './auth.guard';
 import { signUpDto } from './dto/sign-up.dto';
 
 @Controller('auth')
@@ -40,6 +40,7 @@ export class AuthController {
         }
     }
 
+    @UseGuards(AdminGuard)
     @UseGuards(AuthGuard)
     @Get('profile')
     getProfile(@Request() req) {

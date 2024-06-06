@@ -5,6 +5,7 @@ enum ErrorMessages {
   NOTE_NOT_FOUND = 'Note not found',
   TAG_NOT_FOUND = 'Tag not found',
   USER_NOT_ACTIVE = 'User is not active',
+  USER_NOT_ADMIN = 'User is not admin',
 }
 
 export default ErrorMessages;
