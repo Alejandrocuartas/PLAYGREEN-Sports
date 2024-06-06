@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
 import { Bet } from "./bet.entity";
 
-enum BetOptionResult {
+export enum BetOptionResult {
     WON = 'WON',
     LOST = 'LOST',
 }

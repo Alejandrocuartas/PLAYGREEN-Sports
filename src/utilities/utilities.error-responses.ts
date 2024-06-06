@@ -40,6 +40,26 @@ const GetErrorResponse = (error: any) => {
         { message: ErrorMessages.CANNOT_UPDATE_ADMIN },
         HttpStatus.UNAUTHORIZED,
       );
+    case ErrorMessages.BET_NOT_FOUND:
+      throw new HttpException(
+        { message: ErrorMessages.BET_NOT_FOUND },
+        HttpStatus.NOT_FOUND,
+      );
+    case ErrorMessages.DRAW_OPTION_REQUIRED:
+      throw new HttpException(
+        { message: ErrorMessages.DRAW_OPTION_REQUIRED },
+        HttpStatus.BAD_REQUEST,
+      );
+    case ErrorMessages.NO_OPTIONS_PROVIDED:
+      throw new HttpException(
+        { message: ErrorMessages.NO_OPTIONS_PROVIDED },
+        HttpStatus.BAD_REQUEST,
+      );
+    case ErrorMessages.INCORRECT_WINNER_OPTION_ID:
+      throw new HttpException(
+        { message: ErrorMessages.INCORRECT_WINNER_OPTION_ID },
+        HttpStatus.NOT_FOUND,
+      );
     default:
       throw new HttpException(
         { message: error.message },

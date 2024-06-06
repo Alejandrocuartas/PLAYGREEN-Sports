@@ -1,4 +1,10 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateBetDto } from './create-bet.dto';
+import { IsEnum, IsNotEmpty } from "class-validator";
+import { BetStatus } from "../entities/bet.entity";
 
-export class UpdateBetDto extends PartialType(CreateBetDto) {}
+export class UpdateBetDto {
+    @IsNotEmpty()
+    @IsEnum(BetStatus)
+    status?: BetStatus;
+
+    winner_option_id?: number;
+}

@@ -27,7 +27,7 @@ export class CreateBetDto {
 
     @IsArray()
     @ArrayMinSize(2)
-    @ArrayMaxSize(2)
+    @ArrayMaxSize(3)
     //@Type(() => CreateBetOptionDto)
     @ValidateNested()
     options: CreateBetOptionDto[];

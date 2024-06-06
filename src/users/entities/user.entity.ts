@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Transaction } from '../../transactions/entities/transaction.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 export enum UserRole {
   ADMIN = 'ADMIN',
@@ -56,4 +57,8 @@ export class User {
     default: UserRole.USER,
   })
   role: UserRole;
+
+  @OneToMany(() => Transaction, (transaction) => transaction.user, { cascade: true })
+  transactions: Transaction[];
+
 }

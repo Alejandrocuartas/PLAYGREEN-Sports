@@ -7,6 +7,7 @@ import { getEnv } from './app.environment';
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
 import { BetsModule } from './bets/bets.module';
+import { TransactionsModule } from './transactions/transactions.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -19,6 +20,7 @@ import { BetsModule } from './bets/bets.module';
       entities: [
         __dirname + '/users/entities/*.entity{.ts,.js}',
         __dirname + '/bets/entities/*.entity{.ts,.js}',
+        __dirname + '/transactions/entities/*.entity{.ts,.js}',
       ],
       synchronize: true,
       logging: true,
@@ -30,6 +32,7 @@ import { BetsModule } from './bets/bets.module';
     AuthModule,
     AdminModule,
     BetsModule,
+    TransactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
