@@ -24,7 +24,14 @@ export class UsersService {
     return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async findOneById(id: number) {
+    const user = await this.userRepository.findOne({
+      where: { id },
+    });
+    return user;
+  }
+
+  async updateUser(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.userRepository.findOne({
       where: { id },
     });
@@ -54,4 +61,10 @@ export class UsersService {
     const { password, ...userData } = user;
     return userData;
   }
+
+  async update(user: User) {
+    const userData = await this.userRepository.save(user);
+    return userData;
+  }
+
 }

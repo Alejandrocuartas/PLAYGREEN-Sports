@@ -1,9 +1,13 @@
-import Constants from 'src/utilities/utilities.constants';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum UserRole {
   ADMIN = 'ADMIN',
   USER = 'USER',
+}
+
+export enum UserStatus {
+  ACTIVE = 'ACTIVE',
+  BLOCKED = 'BLOCKED',
 }
 
 @Entity()
@@ -37,12 +41,11 @@ export class User {
   email: string;
 
   @Column({
-    type: 'varchar',
-    length: 25,
-    nullable: true,
-    default: Constants.ACTIVE_USER,
+    type: 'enum',
+    enum: UserStatus,
+    default: UserStatus.ACTIVE,
   })
-  status: string;
+  status: UserStatus;
 
   @Column({ type: 'text' })
   password: string;

@@ -20,9 +20,9 @@ const GetErrorResponse = (error: any) => {
         { message: ErrorMessages.INVALID_PASSWORD },
         HttpStatus.UNAUTHORIZED,
       );
-    case ErrorMessages.USER_NOT_ACTIVE:
+    case ErrorMessages.USER_IS_BLOCKED:
       throw new HttpException(
-        { message: ErrorMessages.USER_NOT_ACTIVE },
+        { message: ErrorMessages.USER_IS_BLOCKED },
         HttpStatus.UNAUTHORIZED,
       );
     case ErrorMessages.USER_NOT_ADMIN:

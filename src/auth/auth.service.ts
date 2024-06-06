@@ -5,7 +5,7 @@ import { SignInDto } from './dto/sign-in.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { SignUpDto } from './dto/sign-up.dto';
-import { User } from 'src/users/entities/user.entity';
+import { User, UserStatus } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -18,6 +18,10 @@ export class AuthService {
     const user = await this.usersService.findOne(signInDto.username);
     if (!user) {
       throw new Error(ErrorMessages.USER_NOT_FOUND);
+    }
+
+    if (user.status === UserStatus.BLOCKED) {
+      throw new Error(ErrorMessages.USER_IS_BLOCKED);
     }
 
     const isValid = await bcrypt.compare(signInDto.password, user.password);

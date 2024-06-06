@@ -17,7 +17,7 @@ export class UsersController {
   @Patch(':id')
   async updateUser(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
     try {
-      const user = await this.usersService.update(+id, updateUserDto);
+      const user = await this.usersService.updateUser(+id, updateUserDto);
       return user;
     } catch (error) {
       GetErrorResponse(error);
