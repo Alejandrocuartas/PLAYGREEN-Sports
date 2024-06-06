@@ -14,9 +14,7 @@ import { AuthModule } from './auth/auth.module';
       password: getEnv('DB_PASSWORD'),
       username: getEnv('DB_USERNAME'),
       database: getEnv('DB_NAME'),
-      entities: [
-        __dirname + '/users/entities/*.entity{.ts,.js}',
-      ],
+      entities: [__dirname + '/users/entities/*.entity{.ts,.js}'],
       synchronize: true,
       logging: true,
       ssl: {
@@ -27,8 +25,6 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-  ],
+  providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

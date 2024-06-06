@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import ErrorMessages from 'src/utilities/utilities.errors';
-import * as bvcrypt from 'bcrypt';
-
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
@@ -26,7 +24,34 @@ export class UsersService {
     return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.userRepository.findOne({
+      where: { id },
+    });
+    if (!user) {
+      throw new Error(ErrorMessages.USER_NOT_FOUND);
+    }
+
+    if (updateUserDto.first_name) {
+      user.first_name = updateUserDto.first_name;
+    }
+    if (updateUserDto.last_name) {
+      user.last_name = updateUserDto.last_name;
+    }
+    if (updateUserDto.username) {
+      user.username = updateUserDto.username;
+    }
+    if (updateUserDto.password) {
+      const hashedPassword = await bcrypt.hash(updateUserDto.password, 10);
+      user.password = hashedPassword;
+    }
+    if (updateUserDto.email) {
+      user.email = updateUserDto.email;
+    }
+
+    await this.userRepository.save(user);
+
+    const { password, ...userData } = user;
+    return userData;
   }
 }

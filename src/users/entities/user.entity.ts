@@ -11,7 +11,6 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
@@ -37,7 +36,12 @@ export class User {
   @Column({ type: 'varchar', length: 50, nullable: true })
   email: string;
 
-  @Column({ type: 'varchar', length: 25, nullable: true, default: Constants.ACTIVE_USER })
+  @Column({
+    type: 'varchar',
+    length: 25,
+    nullable: true,
+    default: Constants.ACTIVE_USER,
+  })
   status: string;
 
   @Column({ type: 'text' })
@@ -49,5 +53,4 @@ export class User {
     default: UserRole.USER,
   })
   role: UserRole;
-
 }

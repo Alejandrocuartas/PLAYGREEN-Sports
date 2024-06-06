@@ -2,41 +2,40 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import ErrorMessages from './utilities.errors';
 
 const GetErrorResponse = (error: any) => {
-    console.log(error);
+  console.log(error);
 
-    switch (error.message) {
-        case ErrorMessages.USER_NOT_FOUND:
-            throw new HttpException(
-                { message: ErrorMessages.USER_NOT_FOUND },
-                HttpStatus.NOT_FOUND,
-            );
-        case ErrorMessages.USERNAME_ALREADY_EXISTS:
-            throw new HttpException(
-                { message: ErrorMessages.USERNAME_ALREADY_EXISTS },
-                HttpStatus.CONFLICT,
-            );
-        case ErrorMessages.INVALID_PASSWORD:
-            throw new HttpException(
-                { message: ErrorMessages.INVALID_PASSWORD },
-                HttpStatus.UNAUTHORIZED,
-            );
-        case ErrorMessages.USER_NOT_ACTIVE:
-            throw new HttpException(
-                { message: ErrorMessages.USER_NOT_ACTIVE },
-                HttpStatus.UNAUTHORIZED,
-            );
-        case ErrorMessages.USER_NOT_ADMIN:
-            throw new HttpException(
-                { message: ErrorMessages.USER_NOT_ADMIN },
-                HttpStatus.UNAUTHORIZED,
-            );
-        default:
-            throw new HttpException(
-                { message: error.message },
-                HttpStatus.INTERNAL_SERVER_ERROR,
-            );
-    }
-
+  switch (error.message) {
+    case ErrorMessages.USER_NOT_FOUND:
+      throw new HttpException(
+        { message: ErrorMessages.USER_NOT_FOUND },
+        HttpStatus.NOT_FOUND,
+      );
+    case ErrorMessages.USERNAME_ALREADY_EXISTS:
+      throw new HttpException(
+        { message: ErrorMessages.USERNAME_ALREADY_EXISTS },
+        HttpStatus.CONFLICT,
+      );
+    case ErrorMessages.INVALID_PASSWORD:
+      throw new HttpException(
+        { message: ErrorMessages.INVALID_PASSWORD },
+        HttpStatus.UNAUTHORIZED,
+      );
+    case ErrorMessages.USER_NOT_ACTIVE:
+      throw new HttpException(
+        { message: ErrorMessages.USER_NOT_ACTIVE },
+        HttpStatus.UNAUTHORIZED,
+      );
+    case ErrorMessages.USER_NOT_ADMIN:
+      throw new HttpException(
+        { message: ErrorMessages.USER_NOT_ADMIN },
+        HttpStatus.UNAUTHORIZED,
+      );
+    default:
+      throw new HttpException(
+        { message: error.message },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+  }
 };
 
 export default GetErrorResponse;

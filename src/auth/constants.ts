@@ -1,5 +1,5 @@
-import { getEnv } from "src/app.environment";
+import { getEnv } from 'src/app.environment';
 
 export const jwtConstants = {
-    secret: getEnv("JWT_SECRET"),
+  secret: getEnv('JWT_SECRET'),
 };
