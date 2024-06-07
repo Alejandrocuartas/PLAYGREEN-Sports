@@ -53,4 +53,9 @@ export class AdminService {
         return transactions;
     }
 
+    async adminGetUserBalance(userId: number) {
+        const balance = await this.transactionsService.getTransactionsBalance(userId);
+        return balance;
+    }
+
 }

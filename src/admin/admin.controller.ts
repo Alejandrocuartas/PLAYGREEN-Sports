@@ -42,4 +42,16 @@ export class AdminController {
             GetErrorResponse(error);
         }
     }
+
+    @Get('users/:id/transactions/balance')
+    async adminGetUserBalance(
+        @Param('id') id: number,
+    ) {
+        try {
+            const balance = await this.adminService.adminGetUserBalance(+id);
+            return balance;
+        } catch (error) {
+            GetErrorResponse(error);
+        }
+    }
 }
