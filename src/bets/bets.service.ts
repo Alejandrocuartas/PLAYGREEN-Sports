@@ -90,15 +90,10 @@ export class BetsService {
       throw new Error(ErrorMessages.BET_NOT_FOUND);
     }
 
-    if (updateBetDto.status === BetStatus.CANCELLED) {
-      bet.status = BetStatus.CANCELLED;
+    if (updateBetDto.status !== BetStatus.SETTLED) {
+      bet.status = updateBetDto.status;
       return this.betsRepository.save(bet);
     }
-
-    if (updateBetDto.status !== BetStatus.SETTLED) {
-      return bet;
-    }
-
 
     if (!updateBetDto.winner_option_id) {
       throw new Error(ErrorMessages.INCORRECT_WINNER_OPTION_ID);
