@@ -10,7 +10,7 @@ import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import GetErrorResponse from 'src/utilities/utilities.error-responses';
-import ErrorMessages from 'src/utilities/utilities.errors';
+
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }

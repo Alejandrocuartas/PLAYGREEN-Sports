@@ -26,13 +26,17 @@ export class AdminController {
 
     @Get('transactions')
     async adminGetTransactions(
-        @Query('limit') limit?: number,
-        @Query('page') page?: number,
+        @Query('limit') limit: number = 10,
+        @Query('page') page: number = 1,
         @Query('type') type?: TransactionType,
         @Query('user_id') userId?: number,
     ) {
         try {
-            const transactions = await this.adminService.adminGetTransactions(+userId, +limit, +page, type);
+            let userIdParam = userId;
+            if (userIdParam) {
+                userIdParam = +userId;
+            }
+            const transactions = await this.adminService.adminGetTransactions(userIdParam, +limit, +page, type);
             return transactions;
         } catch (error) {
             GetErrorResponse(error);

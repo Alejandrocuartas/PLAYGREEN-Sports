@@ -103,18 +103,19 @@ export class TransactionsService {
       skip: limit * (page - 1),
     });
 
+    const total = await this.transactionRepository.count({ where: whereClause });
+
     return {
       total: await this.transactionRepository.count({ where: whereClause }),
       limit,
       page,
-      pages: Math.ceil(transactions.length / limit),
+      pages: Math.ceil(total / limit),
       transactions,
     };
   }
 
-  async adminGetTransactions(userId?: number, limit?: number, page?: number, type?: TransactionType) {
+  async adminGetTransactions(userId?: number, limit: number = 10, page: number = 1, type?: TransactionType) {
     const whereClause: any = {
-      status: TransactionStatus.COMPLETED,
       deleted_at: null,
     };
 
@@ -135,13 +136,18 @@ export class TransactionsService {
       },
       take: limit,
       skip: limit * (page - 1),
+      relations: {
+        user: true,
+      },
     });
+
+    const total = await this.transactionRepository.count({ where: whereClause });
 
     return {
       total: await this.transactionRepository.count({ where: whereClause }),
       limit,
       page,
-      pages: Math.ceil(transactions.length / limit),
+      pages: Math.ceil(total / limit),
       transactions,
     };
   }
