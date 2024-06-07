@@ -7,6 +7,7 @@ import {
   Request,
   Patch,
   Param,
+  Query,
 } from '@nestjs/common';
 import { BetsService } from './bets.service';
 import { CreateBetDto } from './dto/create-bet.dto';
@@ -33,9 +34,12 @@ export class BetsController {
   }
 
   @Get()
-  async listBets(@Request() req: CustomRequest) {
+  async listBets(
+    @Request() req: CustomRequest,
+    @Query('sport') sport?: string,
+  ) {
     try {
-      const bets = await this.betsService.listBets(req?.user?.role === UserRole.ADMIN);
+      const bets = await this.betsService.listBets(req?.user?.role === UserRole.ADMIN, sport);
       return bets;
     } catch (error) {
       GetErrorResponse(error);

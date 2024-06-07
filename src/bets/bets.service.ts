@@ -31,7 +31,7 @@ export class BetsService {
     }
 
     let bet = new Bet();
-    bet.sport = createBetDto.sport;
+    bet.sport = createBetDto.sport.toUpperCase();
     bet.event_id = createBetDto.event_id;
 
     const betOptions: BetOption[] = [];
@@ -56,9 +56,16 @@ export class BetsService {
     return bet;
   }
 
-  async listBets(isAdmin: boolean) {
+  async listBets(isAdmin: boolean, sport?: string) {
+
+    let whereClause: any = {};
+    if (sport) {
+      whereClause = { sport };
+    }
+
     if (isAdmin) {
       return this.betsRepository.find({
+        where: whereClause,
         relations: {
           options: true,
         },
@@ -69,6 +76,7 @@ export class BetsService {
       where: {
         status: BetStatus.ACTIVE,
         deleted_at: null,
+        ...whereClause,
       },
       relations: {
         options: true,
