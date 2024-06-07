@@ -60,6 +60,16 @@ const GetErrorResponse = (error: any) => {
         { message: ErrorMessages.INCORRECT_WINNER_OPTION_ID },
         HttpStatus.NOT_FOUND,
       );
+    case ErrorMessages.INVALID_TRANSACTION_TYPE:
+      throw new HttpException(
+        { message: ErrorMessages.INVALID_TRANSACTION_TYPE },
+        HttpStatus.BAD_REQUEST,
+      );
+    case ErrorMessages.INSUFFICIENT_FUNDS_FOR_WITHDRAW:
+      throw new HttpException(
+        { message: ErrorMessages.INSUFFICIENT_FUNDS_FOR_WITHDRAW },
+        HttpStatus.BAD_REQUEST,
+      );
     default:
       throw new HttpException(
         { message: error.message },

@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { BetOption } from "./bet-option.entity";
+import { UserBet } from "./user-bet.entity";
 
 export enum BetStatus {
     ACTIVE = 'ACTIVE',
@@ -42,5 +43,8 @@ export class Bet {
 
     @OneToMany(() => BetOption, (betOption) => betOption.bet, { cascade: true })
     options: BetOption[];
+
+    @OneToMany(() => UserBet, (userBet) => userBet.bet, { cascade: true })
+    userBets: UserBet[];
 
 }

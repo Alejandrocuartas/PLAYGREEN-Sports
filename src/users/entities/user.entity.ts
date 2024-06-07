@@ -1,3 +1,4 @@
+import { UserBet } from 'src/bets/entities/user-bet.entity';
 import { Transaction } from '../../transactions/entities/transaction.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
@@ -49,7 +50,7 @@ export class User {
   status: UserStatus;
 
   @Column({ type: 'text' })
-  password: string;
+  password?: string;
 
   @Column({
     type: 'enum',
@@ -60,5 +61,8 @@ export class User {
 
   @OneToMany(() => Transaction, (transaction) => transaction.user, { cascade: true })
   transactions: Transaction[];
+
+  @OneToMany(() => UserBet, (userBet) => userBet.user, { cascade: true })
+  userBets: UserBet[];
 
 }
