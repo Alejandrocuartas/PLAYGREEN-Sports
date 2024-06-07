@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from "typeorm";
 import { Bet } from "./bet.entity";
+import { UserBet } from "./user-bet.entity";
 
 export enum BetOptionResult {
     WON = 'WON',
@@ -36,5 +37,8 @@ export class BetOption {
 
     @ManyToOne(() => Bet, (bet) => bet.options)
     bet: Bet;
+
+    @OneToMany(() => UserBet, (userBet) => userBet.betOption)
+    userBets: UserBet[];
 
 }

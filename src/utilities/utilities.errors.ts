@@ -13,6 +13,8 @@ enum ErrorMessages {
   INCORRECT_WINNER_OPTION_ID = 'Incorrect winner_option_id',
   INVALID_TRANSACTION_TYPE = 'Invalid transaction type',
   INSUFFICIENT_FUNDS_FOR_WITHDRAW = 'Insufficient funds for withdraw',
+  BET_OPTION_NOT_FOUND = 'Bet option not found',
+  INSUFFICIENT_FUNDS_FOR_BET = 'Insufficient funds for bet. You need to have at least the amount of the bet.',
 }
 
 export default ErrorMessages;

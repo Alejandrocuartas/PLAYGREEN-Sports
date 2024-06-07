@@ -14,14 +14,16 @@ export class TransactionsService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) { }
 
-  async create(createTransactionDto: CreateTransactionDto, userId: number) {
-    if (![TransactionType.DEPOSIT, TransactionType.WITHDRAW].includes(createTransactionDto.type)) {
-      throw new Error(ErrorMessages.INVALID_TRANSACTION_TYPE);
-    }
+  async create(createTransactionDto: CreateTransactionDto, userId: number, fromClient?: boolean) {
 
-    const balance = await this.getTransactionsBalance(userId);
-    if (balance.balance < createTransactionDto.amount && createTransactionDto.type === TransactionType.WITHDRAW) {
-      throw new Error(ErrorMessages.INSUFFICIENT_FUNDS_FOR_WITHDRAW);
+    if (fromClient) {
+      if (![TransactionType.DEPOSIT, TransactionType.WITHDRAW].includes(createTransactionDto.type)) {
+        throw new Error(ErrorMessages.INVALID_TRANSACTION_TYPE);
+      }
+      const balance = await this.getTransactionsBalance(userId);
+      if (balance.balance < createTransactionDto.amount && createTransactionDto.type === TransactionType.WITHDRAW) {
+        throw new Error(ErrorMessages.INSUFFICIENT_FUNDS_FOR_WITHDRAW);
+      }
     }
 
     const user = await this.userRepository.findOne({ where: { id: userId } });
@@ -34,13 +36,17 @@ export class TransactionsService {
     transaction.user = userData;
 
     let amountController = 1;
-    if (createTransactionDto.type === TransactionType.WITHDRAW) {
+    if (createTransactionDto.type === TransactionType.WITHDRAW || createTransactionDto.type === TransactionType.BET) {
       amountController = -1;
     }
 
     transaction.amount = createTransactionDto.amount * amountController;
     transaction.type = createTransactionDto.type;
     transaction.status = TransactionStatus.COMPLETED;
+
+    if (createTransactionDto.user_bet_id) {
+      transaction.user_bet_id = createTransactionDto.user_bet_id;
+    }
 
     return this.transactionRepository.save(transaction);
   }

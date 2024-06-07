@@ -18,4 +18,6 @@ export class CreateTransactionDto {
     @IsNotEmpty()
     type: TransactionType;
 
+    user_bet_id?: number;
+
 }

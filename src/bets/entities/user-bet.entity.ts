@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Bet } from './bet.entity';
+import { BetOption } from './bet-option.entity';
 
 export enum BetState {
     OPEN = 'OPEN',
@@ -40,4 +41,7 @@ export class UserBet {
 
     @ManyToOne(() => Bet, (bet) => bet.userBets)
     bet: Bet;
+
+    @ManyToOne(() => BetOption, (betOption) => betOption.userBets)
+    betOption: BetOption;
 }

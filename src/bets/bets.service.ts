@@ -6,12 +6,22 @@ import { BetOption, BetOptionResult } from './entities/bet-option.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import ErrorMessages from 'src/utilities/utilities.errors';
+import { UserBet } from './entities/user-bet.entity';
+import { User } from 'src/users/entities/user.entity';
+import CreateUserBetDto from './dto/create-user-bet.dto';
+import { Transaction, TransactionType } from 'src/transactions/entities/transaction.entity';
+import { UsersService } from 'src/users/users.service';
+import { TransactionsService } from 'src/transactions/transactions.service';
 
 @Injectable()
 export class BetsService {
 
   constructor(
     @InjectRepository(Bet) private readonly betsRepository: Repository<Bet>,
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    @InjectRepository(UserBet) private readonly userBetsRepository: Repository<UserBet>,
+    @InjectRepository(BetOption) private readonly betOptionsRepository: Repository<BetOption>,
+    private transactionsService: TransactionsService,
   ) { }
 
   async create(createBetDto: CreateBetDto) {
@@ -67,7 +77,7 @@ export class BetsService {
   }
 
   async updateBet(id: number, updateBetDto: UpdateBetDto) {
-    const bet = await this.betsRepository.findOne({ where: { id }, relations: { options: true } });
+    const bet = await this.betsRepository.findOne({ where: { id }, relations: { options: { userBets: { user: true } } } });
     if (!bet) {
       throw new Error(ErrorMessages.BET_NOT_FOUND);
     }
@@ -91,9 +101,11 @@ export class BetsService {
       throw new Error(ErrorMessages.INCORRECT_WINNER_OPTION_ID);
     }
 
+    const winnerUserBets: UserBet[] = [];
     const updatedBetOptions = bet.options.map((option) => {
       if (option.id === updateBetDto.winner_option_id) {
         option.result = BetOptionResult.WON;
+        winnerUserBets.push(...option.userBets);
       } else {
         option.result = BetOptionResult.LOST;
       }
@@ -103,9 +115,92 @@ export class BetsService {
     bet.options = updatedBetOptions;
     bet.status = BetStatus.SETTLED;
 
-    //TO-DO: Deposit money
+    if (winnerUserBets.length > 0) {
+      for (const userBet of winnerUserBets) {
+        const amount = Number(userBet.amount) * Number(userBet.odd);
+        await this.transactionsService.create(
+          { type: TransactionType.WIN, amount, user_bet_id: userBet.id },
+          userBet.user.id,
+        );
+      }
+    }
 
     return this.betsRepository.save(bet);
   }
 
+  async createUserBet(betId: number, userId: number, createUserBetDto: CreateUserBetDto) {
+
+    const userBalance = await this.transactionsService.getTransactionsBalance(userId);
+    if (userBalance.balance < createUserBetDto.amount) {
+      throw new Error(ErrorMessages.INSUFFICIENT_FUNDS_FOR_BET);
+    }
+
+    const betOptions = await this.betOptionsRepository.find({ where: { bet: { id: betId } }, relations: { bet: true } });
+
+    let targetBetOption = betOptions.find((option) => option.id === createUserBetDto.bet_option_id);
+    if (!targetBetOption) {
+      throw new Error(ErrorMessages.BET_OPTION_NOT_FOUND);
+    }
+
+    let userBet = new UserBet();
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new Error(ErrorMessages.USER_NOT_FOUND);
+    }
+
+    const { password, ...userData } = user;
+    userBet.user = userData;
+    userBet.bet = targetBetOption.bet;
+    userBet.amount = createUserBetDto.amount;
+    userBet.odd = targetBetOption.odd;
+    userBet.betOption = targetBetOption;
+
+    userBet = await this.userBetsRepository.save(userBet);
+
+    await Promise.all([
+      this.transactionsService.create(
+        { type: TransactionType.BET, amount: createUserBetDto.amount, user_bet_id: userBet.id },
+        userId,
+      ),
+      this.recalculateBetOptionsOdds(betId),
+    ]);
+
+    targetBetOption = await this.betOptionsRepository.findOne({ where: { id: targetBetOption.id } });
+
+    userBet.odd = targetBetOption.odd;
+
+    await this.userBetsRepository.save(userBet);
+
+    return userBet;
+  }
+
+  async recalculateBetOptionsOdds(betId: number) {
+    const userBets = await this.userBetsRepository.find({ where: { bet: { id: betId } }, relations: { betOption: true } });
+
+    const optionAmounts = new Map<number, number>();
+    let totalAmount = 0;
+    for (const userBet of userBets) {
+      const optionId = userBet.betOption.id;
+      const betAmount = userBet.amount;
+
+      if (!optionAmounts.has(optionId)) {
+        optionAmounts.set(optionId, 0);
+      }
+
+      optionAmounts.set(optionId, Number(Number(optionAmounts.get(optionId)) + Number(betAmount)));
+      totalAmount += Number(betAmount);
+    }
+
+    for (const [optionId, optionTotal] of optionAmounts) {
+      let odd: number = 0;
+
+      if (totalAmount === 0) {
+        odd = 1;
+      } else {
+        odd = 2 - (optionTotal / totalAmount);
+      }
+
+      await this.betOptionsRepository.update(optionId, { odd });
+    }
+  }
 }

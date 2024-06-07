@@ -14,6 +14,7 @@ import { AdminGuard, AuthGuard } from 'src/auth/auth.guard';
 import GetErrorResponse from 'src/utilities/utilities.error-responses';
 import { UserRole } from 'src/users/entities/user.entity';
 import { UpdateBetDto } from './dto/update-bet.dto';
+import CreateUserBetDto from './dto/create-user-bet.dto';
 
 @UseGuards(AuthGuard)
 @Controller('bets')
@@ -53,6 +54,22 @@ export class BetsController {
     } catch (error) {
       GetErrorResponse(error);
     }
+  }
+
+  @Post(':id/user-bets')
+  async createUserBet(
+    @Body() createUserBetDto: CreateUserBetDto,
+    @Param('id') betId: number,
+    @Request() req: CustomRequest,
+  ) {
+
+    try {
+      const userBet = await this.betsService.createUserBet(+betId, +req?.user?.user_id, createUserBetDto);
+      return userBet;
+    } catch (error) {
+      GetErrorResponse(error);
+    }
+
   }
 
 }

@@ -70,6 +70,16 @@ const GetErrorResponse = (error: any) => {
         { message: ErrorMessages.INSUFFICIENT_FUNDS_FOR_WITHDRAW },
         HttpStatus.BAD_REQUEST,
       );
+    case ErrorMessages.BET_OPTION_NOT_FOUND:
+      throw new HttpException(
+        { message: ErrorMessages.BET_OPTION_NOT_FOUND },
+        HttpStatus.NOT_FOUND,
+      );
+    case ErrorMessages.INSUFFICIENT_FUNDS_FOR_BET:
+      throw new HttpException(
+        { message: ErrorMessages.INSUFFICIENT_FUNDS_FOR_BET },
+        HttpStatus.BAD_REQUEST,
+      );
     default:
       throw new HttpException(
         { message: error.message },

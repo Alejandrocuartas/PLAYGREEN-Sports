@@ -18,7 +18,7 @@ export class TransactionsController {
     @Request() req: CustomRequest,
   ) {
     try {
-      const transaction = await this.transactionsService.create(createTransactionDto, req?.user?.user_id);
+      const transaction = await this.transactionsService.create(createTransactionDto, req?.user?.user_id, true);
       return transaction;
     } catch (error) {
       GetErrorResponse(error);
