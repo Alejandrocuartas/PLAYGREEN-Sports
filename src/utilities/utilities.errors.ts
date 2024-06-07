@@ -16,6 +16,7 @@ enum ErrorMessages {
   BET_OPTION_NOT_FOUND = 'Bet option not found',
   INSUFFICIENT_FUNDS_FOR_BET = 'Insufficient funds for bet. You need to have at least the amount of the bet.',
   BET_NOT_ACTIVE = 'Bet is not active',
+  BET_ALREADY_SETTLED = 'Bet is already settled. You cannot cancel it.',
 }
 
 export default ErrorMessages;

@@ -85,6 +85,11 @@ const GetErrorResponse = (error: any) => {
         { message: ErrorMessages.BET_NOT_ACTIVE },
         HttpStatus.BAD_REQUEST,
       );
+    case ErrorMessages.BET_ALREADY_SETTLED:
+      throw new HttpException(
+        { message: ErrorMessages.BET_ALREADY_SETTLED },
+        HttpStatus.BAD_REQUEST,
+      );
     default:
       throw new HttpException(
         { message: error.message },
