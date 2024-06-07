@@ -2,7 +2,6 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
-  UnauthorizedException,
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
@@ -20,7 +19,10 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
-      throw new UnauthorizedException();
+      throw new HttpException(
+        { message: "Token not found. Please login again." },
+        HttpStatus.UNAUTHORIZED,
+      );
     }
     try {
       const payload = await this.jwtService.verifyAsync(token, {
@@ -29,7 +31,10 @@ export class AuthGuard implements CanActivate {
       request['user'] = payload;
     } catch (error) {
       console.log(error);
-      throw new UnauthorizedException();
+      throw new HttpException(
+        { message: "Invalid token. Please login again." },
+        HttpStatus.UNAUTHORIZED,
+      );
     }
     return true;
   }

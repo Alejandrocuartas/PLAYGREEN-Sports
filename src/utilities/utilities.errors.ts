@@ -4,7 +4,7 @@ enum ErrorMessages {
   USER_NOT_FOUND = 'User not found',
   TAG_NOT_FOUND = 'Tag not found',
   USER_IS_BLOCKED = 'User is blocked',
-  USER_NOT_ADMIN = 'User is not admin',
+  USER_NOT_ADMIN = 'Your user is not an admin',
   CANNOT_UPDATE_ADMIN = 'You cannot update an admin user',
   CANNOT_UPDATE_THIS_USER = 'You cannot update this user',
   BET_NOT_FOUND = 'Bet not found',

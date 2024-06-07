@@ -3,11 +3,14 @@ import { UsersService } from 'src/users/users.service';
 import { AdminUpdateUserDto } from './dto/update-user.dto';
 import ErrorMessages from 'src/utilities/utilities.errors';
 import { UserRole } from 'src/users/entities/user.entity';
+import { TransactionsService } from 'src/transactions/transactions.service';
+import { TransactionStatus, TransactionType } from 'src/transactions/entities/transaction.entity';
 
 @Injectable()
 export class AdminService {
     constructor(
         private usersService: UsersService,
+        private transactionsService: TransactionsService,
     ) { }
 
     async adminUpdateUser(id: number, updateUserDto: AdminUpdateUserDto) {
@@ -44,4 +47,10 @@ export class AdminService {
         const { password, ...userData } = user;
         return userData;
     }
+
+    async adminGetTransactions(userId?: number, limit: number = 10, page: number = 1, type?: TransactionType) {
+        const transactions = await this.transactionsService.adminGetTransactions(userId, limit, page, type);
+        return transactions;
+    }
+
 }

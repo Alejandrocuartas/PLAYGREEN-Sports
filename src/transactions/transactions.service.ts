@@ -51,8 +51,8 @@ export class TransactionsService {
     return this.transactionRepository.save(transaction);
   }
 
-  async getTransactionsBalance(user_id: number) {
-    const user = await this.userRepository.findOne({ where: { id: user_id } });
+  async getTransactionsBalance(userId: number) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new Error(ErrorMessages.USER_NOT_FOUND);
     }
@@ -60,7 +60,7 @@ export class TransactionsService {
     const transactions = await this.transactionRepository.find({
       where: {
         user: {
-          id: user_id,
+          id: userId,
         },
         status: TransactionStatus.COMPLETED,
         deleted_at: null,
@@ -76,15 +76,15 @@ export class TransactionsService {
     return { balance };
   }
 
-  async getTransactions(user_id: number, limit: number = 10, page: number = 1, type?: TransactionType) {
-    const user = await this.userRepository.findOne({ where: { id: user_id } });
+  async getTransactions(userId: number, limit: number = 10, page: number = 1, type?: TransactionType) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new Error(ErrorMessages.USER_NOT_FOUND);
     }
 
     const whereClause: any = {
       user: {
-        id: user_id,
+        id: userId,
       },
       status: TransactionStatus.COMPLETED,
       deleted_at: null,
@@ -92,6 +92,40 @@ export class TransactionsService {
 
     if (type) {
       whereClause.type = type;
+    }
+
+    const transactions = await this.transactionRepository.find({
+      where: whereClause,
+      order: {
+        id: 'DESC',
+      },
+      take: limit,
+      skip: limit * (page - 1),
+    });
+
+    return {
+      total: await this.transactionRepository.count({ where: whereClause }),
+      limit,
+      page,
+      pages: Math.ceil(transactions.length / limit),
+      transactions,
+    };
+  }
+
+  async adminGetTransactions(userId?: number, limit?: number, page?: number, type?: TransactionType) {
+    const whereClause: any = {
+      status: TransactionStatus.COMPLETED,
+      deleted_at: null,
+    };
+
+    if (type) {
+      whereClause.type = type;
+    }
+
+    if (userId) {
+      whereClause.user = {
+        id: userId,
+      };
     }
 
     const transactions = await this.transactionRepository.find({

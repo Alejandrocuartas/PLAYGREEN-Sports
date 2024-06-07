@@ -16,18 +16,13 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @UseGuards(AuthGuard)
-  @Patch(':id')
+  @Patch()
   async updateUser(
     @Request() req: CustomRequest,
-    @Param('id') id: number,
     @Body() updateUserDto: UpdateUserDto,
   ) {
     try {
-      if (req?.user?.user_id != id) {
-        throw new Error(ErrorMessages.CANNOT_UPDATE_THIS_USER);
-      }
-
-      const user = await this.usersService.updateUser(+id, updateUserDto);
+      const user = await this.usersService.updateUser(+req?.user?.user_id, updateUserDto);
       return user;
 
     } catch (error) {
