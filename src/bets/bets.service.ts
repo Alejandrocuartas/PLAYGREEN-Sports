@@ -150,6 +150,10 @@ export class BetsService {
       throw new Error(ErrorMessages.BET_OPTION_NOT_FOUND);
     }
 
+    if (targetBetOption.bet.status !== BetStatus.ACTIVE) {
+      throw new Error(ErrorMessages.BET_NOT_ACTIVE);
+    }
+
     let userBet = new UserBet();
     const user = await this.usersRepository.findOne({ where: { id: userId } });
     if (!user) {

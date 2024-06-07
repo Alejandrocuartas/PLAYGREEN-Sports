@@ -15,6 +15,7 @@ enum ErrorMessages {
   INSUFFICIENT_FUNDS_FOR_WITHDRAW = 'Insufficient funds for withdraw',
   BET_OPTION_NOT_FOUND = 'Bet option not found',
   INSUFFICIENT_FUNDS_FOR_BET = 'Insufficient funds for bet. You need to have at least the amount of the bet.',
+  BET_NOT_ACTIVE = 'Bet is not active',
 }
 
 export default ErrorMessages;

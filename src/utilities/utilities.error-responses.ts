@@ -80,6 +80,11 @@ const GetErrorResponse = (error: any) => {
         { message: ErrorMessages.INSUFFICIENT_FUNDS_FOR_BET },
         HttpStatus.BAD_REQUEST,
       );
+    case ErrorMessages.BET_NOT_ACTIVE:
+      throw new HttpException(
+        { message: ErrorMessages.BET_NOT_ACTIVE },
+        HttpStatus.BAD_REQUEST,
+      );
     default:
       throw new HttpException(
         { message: error.message },
