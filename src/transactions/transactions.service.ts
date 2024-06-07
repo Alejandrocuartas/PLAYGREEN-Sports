@@ -76,4 +76,41 @@ export class TransactionsService {
     return { balance };
   }
 
+  async getTransactions(user_id: number, limit: number = 10, page: number = 1, type?: TransactionType) {
+    const user = await this.userRepository.findOne({ where: { id: user_id } });
+    if (!user) {
+      throw new Error(ErrorMessages.USER_NOT_FOUND);
+    }
+
+    const whereClause: any = {
+      user: {
+        id: user_id,
+      },
+      status: TransactionStatus.COMPLETED,
+      deleted_at: null,
+    };
+
+    if (type) {
+      whereClause.type = type;
+    }
+
+    const transactions = await this.transactionRepository.find({
+      where: whereClause,
+      order: {
+        id: 'DESC',
+      },
+      take: limit,
+      skip: limit * (page - 1),
+    });
+
+    return {
+      total: await this.transactionRepository.count({ where: whereClause }),
+      limit,
+      page,
+      pages: Math.ceil(transactions.length / limit),
+      transactions,
+    };
+  }
+
 }
+
