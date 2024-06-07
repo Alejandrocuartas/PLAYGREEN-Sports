@@ -6,7 +6,7 @@ import { BetOption, BetOptionResult } from './entities/bet-option.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import ErrorMessages from 'src/utilities/utilities.errors';
-import { UserBet } from './entities/user-bet.entity';
+import { BetState, UserBet } from './entities/user-bet.entity';
 import { User } from 'src/users/entities/user.entity';
 import CreateUserBetDto from './dto/create-user-bet.dto';
 import { Transaction, TransactionType } from 'src/transactions/entities/transaction.entity';
@@ -109,12 +109,14 @@ export class BetsService {
     }
 
     const winnerUserBets: UserBet[] = [];
+    const loserUserBets: UserBet[] = [];
     const updatedBetOptions = bet.options.map((option) => {
       if (option.id === updateBetDto.winner_option_id) {
         option.result = BetOptionResult.WON;
         winnerUserBets.push(...option.userBets);
       } else {
         option.result = BetOptionResult.LOST;
+        loserUserBets.push(...option.userBets);
       }
       return option;
     });
@@ -125,10 +127,19 @@ export class BetsService {
     if (winnerUserBets.length > 0) {
       for (const userBet of winnerUserBets) {
         const amount = Number(userBet.amount) * Number(userBet.odd);
-        await this.transactionsService.create(
-          { type: TransactionType.WIN, amount, user_bet_id: userBet.id },
-          userBet.user.id,
-        );
+        await Promise.all([
+          this.transactionsService.create(
+            { type: TransactionType.WIN, amount, user_bet_id: userBet.id },
+            userBet.user.id,
+          ),
+          this.userBetsRepository.update(userBet.id, { state: BetState.WON }),
+        ]);
+      }
+    }
+
+    if (loserUserBets.length > 0) {
+      for (const userBet of loserUserBets) {
+        this.userBetsRepository.update(userBet.id, { state: BetState.LOST })
       }
     }
 
