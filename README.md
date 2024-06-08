@@ -33,7 +33,9 @@ This document describes the flow to use the Bets Platform API. The API is built 
 
 **Base URL of the API**: `https://p4dzgo7i4h.execute-api.us-east-1.amazonaws.com/default`
 
-**Swagger Documentation**: [here](http://ec2-34-229-16-6.compute-1.amazonaws.com:8080/api) you can try the API with the Swagger UI.
+**Swagger Documentation**: [here](http://ec2-34-229-16-6.compute-1.amazonaws.com:8080/api) you can try the API with the Swagger UI.  
+**Postman Documentation**: [here](https://documenter.getpostman.com/view/15967321/2sA3XLDPL1) you can see the Postman documentation.  
+**Postman Collection**: [here](https://www.postman.com/orbital-module-geoscientist-50527574/workspace/playgreen-sports) you can try the API with Postman.
 
 ## Endpoints and Usage Flow
 
