@@ -64,7 +64,6 @@ export class AuthController {
     description: 'User info returned successfully',
     type: UserSession,
   })
-  @UseGuards(AdminGuard)
   @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@Request() req: CustomRequest) {
