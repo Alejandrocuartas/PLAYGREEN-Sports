@@ -47,5 +47,4 @@ export class Transaction {
 
     @Column({ type: 'int', nullable: true })
     user_bet_id?: number;
-
 }

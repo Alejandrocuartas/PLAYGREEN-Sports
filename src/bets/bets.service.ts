@@ -193,7 +193,8 @@ export class BetsService {
 
     await this.userBetsRepository.save(userBet);
 
-    return userBet;
+    const { bet, betOption, user: userDetails, ...userBetData } = userBet;
+    return userBetData;
   }
 
   async recalculateBetOptionsOdds(betId: number) {
