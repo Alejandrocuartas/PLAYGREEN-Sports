@@ -41,7 +41,7 @@ This document describes the flow to use the Bets Platform API. The API is built 
 
 1. **Register a New User**
    - **POST /auth/signup**: Allows any person to register with their info and returns a JWT.
-     - **Recommendation**: Try with existing usernames to see validations.
+     - **Recommendation**: Try with existing usernames to see validations and register users with roles ADMIN and USER.
 
 2. **Log In**
    - **POST /auth/login**: Allows any person to log in with a username and password and returns a JWT.
